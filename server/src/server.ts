@@ -1,22 +1,51 @@
+import "express-async-errors";
 import express from "express";
 import dotenv from "dotenv";
 import helmet from "helmet";
+import cors from "cors";
 
 import { v1Router } from "@/routes/v1";
+import { FRONTEND_URL, ISPROD, PORT } from "@/constants";
+import { errorHandler } from "@/middleware";
+import { NotFoundError } from "@/errors/not-found";
+import morgan from "morgan";
 
+// CONFIGURATION
 dotenv.config();
-const app = express();
-const PORT = process.env.PORT || 3005;
 
-app.use(express.json());
+const app = express();
+
+// MIDDLEWARE
+
+// Helmet helps secure the application by setting various HTTP headers
 app.use(helmet());
 
+// Cors
+// Allow requests from the frontend
+app.use(
+  cors({
+    origin: ISPROD ? FRONTEND_URL : "http://localhost:3000",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
+
+// Morgan
+app.use(morgan("dev"));
+
+// Parse incoming requests with JSON payloads
+app.use(express.json());
+
+// ROUTES
+
+// Default route
 app.get("/", (req, res) => {
   res.json({
     message: "Silence is golden",
   });
 });
 
+// Version 1 API routes
 app.use("/api/v1", v1Router);
 
 // Catch all route. If a request reaches this point, it means the requested route does not exist.
