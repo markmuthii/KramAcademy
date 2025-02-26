@@ -9,9 +9,11 @@ import { FRONTEND_URL, ISPROD, PORT } from "@/constants";
 import { errorHandler } from "@/middleware";
 import { NotFoundError } from "@/errors/not-found";
 import morgan from "morgan";
+import { connectToDatabase } from "@/db/config";
 
 // CONFIGURATION
 dotenv.config();
+connectToDatabase();
 
 const app = express();
 
