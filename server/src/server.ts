@@ -19,6 +19,16 @@ app.get("/", (req, res) => {
 
 app.use("/api/v1", v1Router);
 
+// Catch all route. If a request reaches this point, it means the requested route does not exist.
+app.all("*", async () => {
+  throw new NotFoundError();
+});
+
+// Error handler
+// Catches all errors thrown anywhere in the application, and sends a response to the client.
+// This middleware along with the express-async-errors rids us of the need to use try-catch blocks in our application.
+app.use(errorHandler);
+
 app.listen(PORT, () => {
   console.log("Server is running on PORT " + PORT);
 });
