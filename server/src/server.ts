@@ -3,12 +3,12 @@ import express from "express";
 import dotenv from "dotenv";
 import helmet from "helmet";
 import cors from "cors";
+import morgan from "morgan";
 
 import { v1Router } from "@/routes/v1";
 import { FRONTEND_URL, ISPROD, PORT } from "@/constants";
 import { errorHandler } from "@/middleware";
 import { NotFoundError } from "@/errors/not-found";
-import morgan from "morgan";
 import { connectToDatabase } from "@/db/config";
 
 // CONFIGURATION

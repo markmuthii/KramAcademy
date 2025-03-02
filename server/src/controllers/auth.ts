@@ -1,9 +1,18 @@
+import { User } from "@/db/models/user";
+import { respond } from "@/utils";
 import { Request, Response } from "express";
 
 export const register = async (req: Request, res: Response) => {
-  res.json({
-    message: "Register route",
-  });
+  await User.create(req.body);
+
+  respond(
+    res,
+    {
+      success: true,
+      message: "User registered successfully",
+    },
+    201
+  );
 };
 
 export const login = async (req: Request, res: Response) => {
