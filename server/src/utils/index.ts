@@ -1,8 +1,9 @@
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { Response } from "express";
+import jwt from "jsonwebtoken";
 import zlib from "zlib";
 
-import { Response } from "express";
 import { IAPIResponse, IJWTUser } from "@/types";
+import { ISPROD, JWT_SECRET, PRODUCTION_DOMAIN } from "@/constants";
 
 export const respond = <T>(
   res: Response,
@@ -46,7 +47,7 @@ export const decompressJWT = (compressedToken: string) => {
 
 // TODO: Update this function to work with any kind of JWT payload, not just IJWTUser
 export const generateJWT = (user: IJWTUser, compressed: boolean = false) => {
-  const token = jwt.sign({ user }, process.env.JWT_SECRET as string, {
+  const token = jwt.sign({ user }, JWT_SECRET as string, {
     expiresIn: "1d",
   });
 
@@ -62,7 +63,7 @@ export const verifyJWT = (token: string, compressed: boolean = false) => {
 
     jwtToken
       .then((token) => {
-        jwt.verify(token, process.env.JWT_SECRET as string, (err, decoded) => {
+        jwt.verify(token, JWT_SECRET as string, (err, decoded) => {
           if (err) {
             return reject(err);
           }
@@ -72,4 +73,14 @@ export const verifyJWT = (token: string, compressed: boolean = false) => {
       })
       .catch(reject);
   }) as Promise<IJWTUser>;
+};
+
+export const setCookie = (res: Response, name: string, value: string) => {
+  res.cookie(name, value, {
+    httpOnly: true,
+    maxAge: 1000 * 60 * 60 * 24,
+    sameSite: "none",
+    secure: ISPROD,
+    domain: ISPROD ? `.${PRODUCTION_DOMAIN}` : undefined,
+  });
 };
