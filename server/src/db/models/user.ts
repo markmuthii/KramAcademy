@@ -41,9 +41,6 @@ userSchema.pre("save", async function (next) {
   const hashedPassword = await hash(this.password, 10);
   this.password = hashedPassword;
 
-  // Check if the email is already in use
-  const emailExists = await User.exists({ email: this.email });
-
   next();
 });
 
