@@ -1,9 +1,10 @@
 import "express-async-errors";
 import express from "express";
-import dotenv from "dotenv";
+import "dotenv/config";
 import helmet from "helmet";
 import cors from "cors";
 import morgan from "morgan";
+import compression from "compression";
 
 import { v1Router } from "@/routes/v1";
 import { FRONTEND_URL, ISPROD, PORT } from "@/constants";
@@ -12,7 +13,6 @@ import { NotFoundError } from "@/errors/not-found";
 import { connectToDatabase } from "@/db/config";
 
 // CONFIGURATION
-dotenv.config();
 connectToDatabase();
 
 const app = express();
@@ -21,6 +21,7 @@ const app = express();
 
 // Helmet helps secure the application by setting various HTTP headers
 app.use(helmet());
+app.use(compression());
 
 // Cors
 // Allow requests from the frontend

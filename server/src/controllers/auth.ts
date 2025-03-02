@@ -1,6 +1,10 @@
 import { Request, Response } from "express";
+import { compare } from "bcrypt";
+
 import { User } from "@/db/models/user";
-import { respond } from "@/utils";
+import { generateJWT, respond, setCookie } from "@/utils";
+import { BadRequestError } from "@/errors/bad-request";
+import { AUTH_COOKIE_NAME } from "@/constants";
 
 export const register = async (req: Request, res: Response) => {
   await User.create(req.body);
@@ -16,8 +20,29 @@ export const register = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
+  const user = await User.findOne({
+    email: req.body.email,
+  });
+
+  if (!user) {
+    throw new BadRequestError("Invalid credentials");
+  }
+
+  const passwordsMatch = await compare(req.body.password, user.password);
+
+  if (!passwordsMatch) {
+    throw new BadRequestError("Invalid credentials");
+  }
+
+  const token = await generateJWT({ _id: user._id as unknown as string });
+
+  setCookie(res, AUTH_COOKIE_NAME!, token);
+
+  let { password, __v, ...userData } = user.toObject();
+
   respond(res, {
-    message: "Login route",
+    message: "Login successful",
+    user: userData,
   });
 };
 

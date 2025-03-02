@@ -8,6 +8,7 @@ import {
   verifyEmail,
 } from "@/controllers";
 import {
+  loginValidator,
   registrationValidator,
   validateRequest,
 } from "@/middleware/request-validators";
@@ -16,7 +17,7 @@ const authRouter = Router();
 
 authRouter.post("/register", registrationValidator, validateRequest, register);
 
-authRouter.post("/login", login);
+authRouter.post("/login", loginValidator, validateRequest, login);
 
 authRouter.delete("/logout", logout);
 

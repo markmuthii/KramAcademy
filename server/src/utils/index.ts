@@ -28,7 +28,7 @@ export const generateCompressedJWT = (token: string) => {
 
       resolve(compressedToken.toString("base64"));
     });
-  });
+  }) as Promise<string>;
 };
 
 export const decompressJWT = (compressedToken: string) => {
@@ -46,12 +46,15 @@ export const decompressJWT = (compressedToken: string) => {
 };
 
 // TODO: Update this function to work with any kind of JWT payload, not just IJWTUser
-export const generateJWT = (user: IJWTUser, compressed: boolean = false) => {
+export const generateJWT = async (
+  user: IJWTUser,
+  compressed: boolean = false
+) => {
   const token = jwt.sign({ user }, JWT_SECRET as string, {
     expiresIn: "1d",
   });
 
-  return compressed ? generateCompressedJWT(token) : token;
+  return compressed ? await generateCompressedJWT(token) : token;
 };
 
 // TODO: Update this function to work with any kind of JWT payload, not just IJWTUser
