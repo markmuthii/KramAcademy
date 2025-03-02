@@ -1,3 +1,5 @@
+import { JwtPayload } from "jsonwebtoken";
+
 export interface ISerializedError {
   message: string;
   field?: string;
@@ -26,4 +28,9 @@ export interface IUser {
 
 export interface IJWTUser {
   _id: IUser["_id"];
+}
+
+// TJWTPaylkoad which extends JWTPayload to include user
+export interface IJWTPayload extends JwtPayload {
+  user: IJWTUser;
 }

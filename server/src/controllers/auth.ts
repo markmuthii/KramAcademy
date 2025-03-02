@@ -46,6 +46,16 @@ export const login = async (req: Request, res: Response) => {
   });
 };
 
+export const currentUser = async (req: Request, res: Response) => {
+  const user = await User.findById(req.userID);
+
+  const { password, __v, ...userData } = user!.toObject();
+
+  respond(res, {
+    user: userData,
+  });
+};
+
 export const logout = async (req: Request, res: Response) => {
   respond(res, {
     message: "Logout route",

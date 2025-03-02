@@ -1,8 +1,8 @@
 import { Response } from "express";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import zlib from "zlib";
 
-import { IAPIResponse, IJWTUser } from "@/types";
+import { IAPIResponse, IJWTPayload, IJWTUser } from "@/types";
 import { ISPROD, JWT_SECRET, PRODUCTION_DOMAIN } from "@/constants";
 
 export const respond = <T>(
@@ -68,14 +68,16 @@ export const verifyJWT = (token: string, compressed: boolean = false) => {
       .then((token) => {
         jwt.verify(token, JWT_SECRET as string, (err, decoded) => {
           if (err) {
-            return reject(err);
+            return reject("Invalid token");
           }
 
           resolve(decoded as IJWTUser);
         });
       })
-      .catch(reject);
-  }) as Promise<IJWTUser>;
+      .catch((err) => {
+        reject("Error decoding token");
+      });
+  }) as unknown as IJWTPayload;
 };
 
 export const setCookie = (res: Response, name: string, value: string) => {

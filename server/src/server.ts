@@ -11,6 +11,7 @@ import { FRONTEND_URL, ISPROD, PORT } from "@/constants";
 import { errorHandler } from "@/middleware";
 import { NotFoundError } from "@/errors/not-found";
 import { connectToDatabase } from "@/db/config";
+import cookieParser from "cookie-parser";
 
 // CONFIGURATION
 connectToDatabase();
@@ -21,6 +22,7 @@ const app = express();
 
 // Helmet helps secure the application by setting various HTTP headers
 app.use(helmet());
+app.use(cookieParser());
 app.use(compression());
 
 // Cors
