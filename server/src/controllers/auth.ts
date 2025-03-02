@@ -16,31 +16,31 @@ export const register = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
-  res.json({
+  respond(res, {
     message: "Login route",
   });
 };
 
 export const logout = async (req: Request, res: Response) => {
-  res.json({
+  respond(res, {
     message: "Logout route",
   });
 };
 
 export const forgotPassword = async (req: Request, res: Response) => {
-  res.json({
+  respond(res, {
     message: "Forgot password route",
   });
 };
 
 export const resetPassword = async (req: Request, res: Response) => {
-  res.json({
+  respond(res, {
     message: "Reset password route",
   });
 };
 
 export const verifyEmail = async (req: Request, res: Response) => {
-  res.json({
+  respond(res, {
     message: "Verify email route",
   });
 };
