@@ -5,30 +5,30 @@ const userSchema = new Schema(
   {
     firstName: {
       type: String,
-      required: true,
+      required: [true, "First Name is required"],
     },
     lastName: {
       type: String,
-      required: true,
+      required: [true, "Last Name is required"],
     },
     email: {
       type: String,
-      required: true,
+      required: [true, "Email is required"],
       unique: [true, "Email already in use"],
     },
     phone: {
       type: String,
-      required: true,
+      required: [true, "Phone is required"],
       unique: [true, "Phone number already in use"],
     },
     username: {
       type: String,
-      required: true,
+      required: [true, "Username is required"],
       unique: [true, "Username already in use"],
     },
     password: {
       type: String,
-      required: true,
+      required: [true, "Password is required"],
     },
   },
   {
