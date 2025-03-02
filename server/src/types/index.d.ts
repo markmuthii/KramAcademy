@@ -12,3 +12,18 @@ export interface IErrorResponse<T> {
   success: boolean;
   errors: T[];
 }
+
+export interface IUser {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  username: string;
+  password: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IJWTUser {
+  _id: IUser["_id"];
+}
