@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { compare } from "bcrypt";
 
 import { User } from "@/db/models/user";
-import { generateJWT, respond, setCookie } from "@/utils";
+import { clearCookie, generateJWT, respond, setCookie } from "@/utils";
 import { BadRequestError } from "@/errors/bad-request";
 import { AUTH_COOKIE_NAME } from "@/constants";
 
@@ -38,7 +38,7 @@ export const login = async (req: Request, res: Response) => {
 
   setCookie(res, AUTH_COOKIE_NAME!, token);
 
-  let { password, __v, ...userData } = user.toObject();
+  const { password, __v, ...userData } = user.toObject();
 
   respond(res, {
     message: "Login successful",
@@ -57,8 +57,10 @@ export const currentUser = async (req: Request, res: Response) => {
 };
 
 export const logout = async (req: Request, res: Response) => {
+  clearCookie(res, AUTH_COOKIE_NAME!);
+
   respond(res, {
-    message: "Logout route",
+    message: "Logout successful",
   });
 };
 

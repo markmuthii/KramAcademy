@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 import {
   currentUser,
   forgotPassword,
@@ -9,11 +10,11 @@ import {
   verifyEmail,
 } from "@/controllers";
 import {
+  authenticate,
   loginValidator,
   registrationValidator,
   validateRequest,
-} from "@/middleware/request-validators";
-import { authenticate } from "@/middleware";
+} from "@/middleware";
 
 const authRouter = Router();
 
@@ -23,7 +24,7 @@ authRouter.post("/login", loginValidator, validateRequest, login);
 
 authRouter.get("/me", authenticate, currentUser);
 
-authRouter.delete("/logout", logout);
+authRouter.delete("/logout", authenticate, logout);
 
 authRouter.post("/forgot-password", forgotPassword);
 

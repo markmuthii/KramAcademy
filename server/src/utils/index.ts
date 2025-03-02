@@ -1,9 +1,9 @@
-import { Response } from "express";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { CookieOptions, Response } from "express";
+import jwt from "jsonwebtoken";
 import zlib from "zlib";
 
 import { IAPIResponse, IJWTPayload, IJWTUser } from "@/types";
-import { ISPROD, JWT_SECRET, PRODUCTION_DOMAIN } from "@/constants";
+import { COOKIE_OPTIONS, JWT_SECRET } from "@/constants";
 
 export const respond = <T>(
   res: Response,
@@ -80,12 +80,20 @@ export const verifyJWT = (token: string, compressed: boolean = false) => {
   }) as unknown as IJWTPayload;
 };
 
-export const setCookie = (res: Response, name: string, value: string) => {
-  res.cookie(name, value, {
-    httpOnly: true,
-    maxAge: 1000 * 60 * 60 * 24,
-    sameSite: "none",
-    secure: ISPROD,
-    domain: ISPROD ? `.${PRODUCTION_DOMAIN}` : undefined,
-  });
+export const setCookie = (
+  res: Response,
+  name: string,
+  value: string,
+  options: CookieOptions = COOKIE_OPTIONS
+) => {
+  res.cookie(name, value, options);
+};
+
+export const clearCookie = (
+  res: Response,
+  name: string,
+  options: CookieOptions = COOKIE_OPTIONS
+) => {
+  delete options.maxAge;
+  res.clearCookie(name, options);
 };
