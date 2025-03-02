@@ -1,6 +1,6 @@
+import { Request, Response } from "express";
 import { User } from "@/db/models/user";
 import { respond } from "@/utils";
-import { Request, Response } from "express";
 
 export const register = async (req: Request, res: Response) => {
   await User.create(req.body);

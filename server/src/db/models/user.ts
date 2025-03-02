@@ -14,17 +14,17 @@ const userSchema = new Schema(
     email: {
       type: String,
       required: true,
-      unique: true,
+      unique: [true, "Email already in use"],
     },
     phone: {
       type: String,
       required: true,
-      unique: true,
+      unique: [true, "Phone number already in use"],
     },
     username: {
       type: String,
       required: true,
-      unique: true,
+      unique: [true, "Username already in use"],
     },
     password: {
       type: String,
@@ -40,6 +40,9 @@ userSchema.pre("save", async function (next) {
   // Hash password before saving the document to the database
   const hashedPassword = await hash(this.password, 10);
   this.password = hashedPassword;
+
+  // Check if the email is already in use
+  const emailExists = await User.exists({ email: this.email });
 
   next();
 });
