@@ -1,3 +1,4 @@
+import { Router } from "express";
 import {
   forgotPassword,
   login,
@@ -6,11 +7,14 @@ import {
   resetPassword,
   verifyEmail,
 } from "@/controllers";
-import { Router } from "express";
+import {
+  registrationValidator,
+  validateRequest,
+} from "@/middleware/request-validators";
 
 const authRouter = Router();
 
-authRouter.post("/register", register);
+authRouter.post("/register", registrationValidator, validateRequest, register);
 
 authRouter.post("/login", login);
 
