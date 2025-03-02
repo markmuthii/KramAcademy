@@ -7,3 +7,8 @@ export interface IAPIResponse<T> {
   success: boolean;
   data: T[] | T;
 }
+
+export interface IErrorResponse<T> {
+  success: boolean;
+  errors: T[];
+}
