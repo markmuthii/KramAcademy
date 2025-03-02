@@ -1,4 +1,4 @@
-import { IAPIResponse, ISerializedError } from "@/types";
+import { IAPIResponse, IErrorResponse, ISerializedError } from "@/types";
 
 export abstract class CustomError extends Error {
   abstract statusCode: number;
@@ -7,5 +7,5 @@ export abstract class CustomError extends Error {
     super(message);
   }
 
-  abstract serializeErrors(): IAPIResponse<ISerializedError>;
+  abstract serializeErrors(): IErrorResponse<ISerializedError>;
 }

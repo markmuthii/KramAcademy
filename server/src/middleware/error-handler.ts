@@ -14,6 +14,6 @@ export const errorHandler = (
     .json(
       err instanceof CustomError
         ? err.serializeErrors()
-        : [{ message: err.message }]
+        : { success: false, errors: [{ message: err.message }] }
     );
 };
