@@ -34,6 +34,11 @@ export const registrationValidator = [
     .withMessage("Passwords do not match."),
 ];
 
+export const loginValidator = [
+  body("email").isEmail().withMessage("Email is invalid."),
+  body("password").notEmpty().withMessage("Password is required."),
+];
+
 export const validateRequest = (
   req: Request,
   res: Response,
