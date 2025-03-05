@@ -1,13 +1,28 @@
 import { Request, Response } from "express";
 import { compare } from "bcrypt";
+import crypto from "crypto";
 
 import { User } from "@/db/models/user";
 import { clearCookie, generateJWT, respond, setCookie } from "@/utils";
 import { BadRequestError } from "@/errors/bad-request";
-import { AUTH_COOKIE_NAME } from "@/constants";
+import { AUTH_COOKIE_NAME, BACKEND_URL } from "@/constants";
+import { Email } from "@/classes/Email";
 
 export const register = async (req: Request, res: Response) => {
+  // TODO: Use a timebound token (JWT) instead of a static token
+  // generate a verification token
+  const token = crypto.randomBytes(32).toString("hex");
+
+  // add the token to the request body
+  req.body.verificationToken = token;
+
   await User.create(req.body);
+
+  const email = new Email(req.body.email);
+
+  email.sendEmailVerification(
+    `${BACKEND_URL}/api/v1/auth/verify-email?token=${token}`
+  );
 
   respond(
     res,
@@ -17,6 +32,12 @@ export const register = async (req: Request, res: Response) => {
     },
     201
   );
+};
+
+export const verifyEmail = async (req: Request, res: Response) => {
+  respond(res, {
+    message: "Verify email route",
+  });
 };
 
 export const login = async (req: Request, res: Response) => {
@@ -73,11 +94,5 @@ export const forgotPassword = async (req: Request, res: Response) => {
 export const resetPassword = async (req: Request, res: Response) => {
   respond(res, {
     message: "Reset password route",
-  });
-};
-
-export const verifyEmail = async (req: Request, res: Response) => {
-  respond(res, {
-    message: "Verify email route",
   });
 };

@@ -5,6 +5,7 @@ export const MONGO_URI =
 export const JWT_SECRET =
   process.env.JWT_SECRET || "extemelysecretkeygoeshereorintheenvfile";
 export const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
+export const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3005";
 export const PRODUCTION_DOMAIN = process.env.PRODUCTION_DOMAIN || "localhost";
 
 export const AUTH_COOKIE_NAME =
@@ -16,3 +17,6 @@ export const COOKIE_OPTIONS = {
   secure: ISPROD,
   domain: ISPROD ? `.${PRODUCTION_DOMAIN}` : undefined,
 };
+
+export const RESEND_API_KEY = process.env.RESEND_API_KEY;
+export const RESEND_EMAIL = `Thrifters <${process.env.RESEND_EMAIL}>`;
