@@ -124,15 +124,28 @@ export const logout = async (req: Request, res: Response) => {
 };
 
 export const forgotPassword = async (req: Request, res: Response) => {
-  const { email } = req.body;
+  const { email: userEmail } = req.body;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email: userEmail });
 
   if (!user) {
     throw new BadRequestError("User not found");
   }
 
   const token = crypto.randomBytes(32).toString("hex");
+
+  await Token.create({
+    token,
+    user: user._id,
+    type: "password",
+  });
+
+  const email = new Email(user.email);
+
+  // TODO: Set the frontend as the reset password link
+  const resetLink = `${BACKEND_URL}/api/v1/auth/reset-password?token=${token}&email=${user.email}`;
+
+  email.sendResetPasswordEmail(resetLink);
 
   respond(res, {
     message: "Forgot password route",

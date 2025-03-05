@@ -48,4 +48,18 @@ export class Email {
     // Send the email
     this.sendEmail("Welcome to Thrifters!", emailTemplate);
   }
+
+  sendResetPasswordEmail(resetLink: string) {
+    // Get the email template from the email-templates folder
+    const emailTemplate = fs.readFileSync(
+      "src/templates/email/reset-password.html",
+      "utf-8"
+    );
+
+    // Replace the placeholder with the reset link
+    const emailBody = emailTemplate.replace("{{resetLink}}", resetLink);
+
+    // Send the email
+    this.sendEmail("Reset your password", emailBody);
+  }
 }
