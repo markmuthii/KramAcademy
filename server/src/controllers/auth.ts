@@ -7,16 +7,20 @@ import { clearCookie, generateJWT, respond, setCookie } from "@/utils";
 import { BadRequestError } from "@/errors/bad-request";
 import { AUTH_COOKIE_NAME, BACKEND_URL } from "@/constants";
 import { Email } from "@/providers/Email";
+import { Token } from "@/db/models/token";
 
 export const register = async (req: Request, res: Response) => {
   // TODO: Use a timebound token (JWT) instead of a static token
   // generate a verification token
   const token = crypto.randomBytes(32).toString("hex");
 
-  // add the token to the request body
-  req.body.verificationToken = token;
+  const user = await User.create(req.body);
 
-  await User.create(req.body);
+  await Token.create({
+    token,
+    user: user._id,
+    type: "email",
+  });
 
   const email = new Email(req.body.email);
 
@@ -39,22 +43,33 @@ export const verifyEmail = async (req: Request, res: Response) => {
   // Get the token from the query params
   const { token } = req.query;
 
-  // Find the user with the verification token
-  const user = await User.findOne({
-    verificationToken: token as string,
+  // Find the details of the token
+  const tokenDetails = await Token.findOne({
+    token,
+    type: "email",
+    status: "active",
   });
 
-  if (!user) {
+  if (!tokenDetails) {
     throw new BadRequestError("Invalid token");
   }
 
-  // Update the user's verification status
-  await User.findByIdAndUpdate(user._id, {
-    verificationToken: null,
+  // Find the user through the user id in token and update the emailVerifiedOn field
+  const updatedUser = await User.findByIdAndUpdate(tokenDetails.user, {
     emailVerifiedOn: new Date(),
   });
 
-  const email = new Email(user.email);
+  if (!updatedUser) {
+    throw new BadRequestError("Invalid token");
+  }
+
+  // Set the token status to inactive
+  tokenDetails.status = "inactive";
+
+  await tokenDetails.save();
+
+  // Send a welcome email to the user
+  const email = new Email(updatedUser.email);
 
   email.sendWelcomeEmail();
 
@@ -109,6 +124,16 @@ export const logout = async (req: Request, res: Response) => {
 };
 
 export const forgotPassword = async (req: Request, res: Response) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (!user) {
+    throw new BadRequestError("User not found");
+  }
+
+  const token = crypto.randomBytes(32).toString("hex");
+
   respond(res, {
     message: "Forgot password route",
   });
