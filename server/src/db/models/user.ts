@@ -48,6 +48,16 @@ userSchema.pre("save", async function (next) {
   next();
 });
 
+// Pre-update hook to hash the password before updating
+userSchema.pre("findOneAndUpdate", async function (next) {
+  const update = this.getUpdate();
+  if (update && typeof update === "object" && "password" in update) {
+    const hashedPassword = await hash(update.password, 10);
+    this.setUpdate({ ...update, password: hashedPassword });
+  }
+  next();
+});
+
 const User = model("User", userSchema);
 
 export { User };

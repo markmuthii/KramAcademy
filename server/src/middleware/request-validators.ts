@@ -1,26 +1,11 @@
-import { RequestValidationError } from "@/errors/request-validation";
 import { NextFunction, Request, Response } from "express";
 import { body, validationResult } from "express-validator";
+import { PASSWORD_OPTIONS } from "@/constants";
+import { RequestValidationError } from "@/errors/request-validation";
 
-export const registrationValidator = [
-  body(["firstName", "lastName"])
-    .isString()
-    .notEmpty()
-    .withMessage(
-      (value, { path, req }) =>
-        `${path === "firstName" ? "First Name" : "Last Name"} is required.`
-    ),
-  body("email").isEmail().withMessage("Email is invalid."),
-  body("phone").isMobilePhone("en-KE").withMessage("Phone number is invalid."),
-  body("username").isString().notEmpty().withMessage("Username is required."),
+const passwordValidator = [
   body("password")
-    .isStrongPassword({
-      minLength: 8,
-      minLowercase: 1,
-      minUppercase: 1,
-      minNumbers: 1,
-      minSymbols: 1,
-    })
+    .isStrongPassword(PASSWORD_OPTIONS)
     .withMessage(
       "Password is weak. It should have at least 8 characters, 1 lowercase letter, 1 uppercase letter, 1 number, and 1 symbol."
     ),
@@ -34,10 +19,26 @@ export const registrationValidator = [
     .withMessage("Passwords do not match."),
 ];
 
+export const registrationValidator = [
+  body(["firstName", "lastName"])
+    .isString()
+    .notEmpty()
+    .withMessage(
+      (value, { path, req }) =>
+        `${path === "firstName" ? "First Name" : "Last Name"} is required.`
+    ),
+  body("email").isEmail().withMessage("Email is invalid."),
+  body("phone").isMobilePhone("en-KE").withMessage("Phone number is invalid."),
+  body("username").isString().notEmpty().withMessage("Username is required."),
+  ...passwordValidator,
+];
+
 export const loginValidator = [
   body("email").isEmail().withMessage("Email is invalid."),
   body("password").notEmpty().withMessage("Password is required."),
 ];
+
+export const passwordResetValidator = [...passwordValidator];
 
 export const validateRequest = (
   req: Request,

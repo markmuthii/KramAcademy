@@ -20,3 +20,11 @@ export const COOKIE_OPTIONS = {
 
 export const RESEND_API_KEY = process.env.RESEND_API_KEY;
 export const RESEND_EMAIL = `Thrifters <${process.env.RESEND_EMAIL}>`;
+
+export const PASSWORD_OPTIONS = {
+  minLength: 8,
+  minLowercase: 1,
+  minUppercase: 1,
+  minNumbers: 1,
+  minSymbols: 1,
+};

@@ -153,6 +153,37 @@ export const forgotPassword = async (req: Request, res: Response) => {
 };
 
 export const resetPassword = async (req: Request, res: Response) => {
+  const { token, email } = req.query;
+  const { password } = req.body;
+
+  const tokenDetails = await Token.findOne({
+    token,
+    type: "password",
+    status: "active",
+  }).populate<{
+    user: {
+      _id: string;
+      email: string;
+    };
+  }>("user", ["email"]);
+
+  if (!tokenDetails || tokenDetails.user.email !== email) {
+    throw new BadRequestError("Invalid token");
+  }
+
+  await User.findOneAndUpdate(
+    {
+      email,
+    },
+    {
+      password,
+    }
+  );
+
+  tokenDetails.status = "inactive";
+
+  await tokenDetails.save();
+
   respond(res, {
     message: "Reset password route",
   });
