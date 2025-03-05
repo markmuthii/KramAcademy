@@ -20,6 +20,7 @@ export const register = async (req: Request, res: Response) => {
 
   const email = new Email(req.body.email);
 
+  // TODO: Set the frontend as the email verification link
   email.sendEmailVerification(
     `${BACKEND_URL}/api/v1/auth/verify-email?token=${token}`
   );
@@ -35,8 +36,30 @@ export const register = async (req: Request, res: Response) => {
 };
 
 export const verifyEmail = async (req: Request, res: Response) => {
+  // Get the token from the query params
+  const { token } = req.query;
+
+  // Find the user with the verification token
+  const user = await User.findOne({
+    verificationToken: token as string,
+  });
+
+  if (!user) {
+    throw new BadRequestError("Invalid token");
+  }
+
+  // Update the user's verification status
+  await User.findByIdAndUpdate(user._id, {
+    verificationToken: null,
+    emailVerifiedOn: new Date(),
+  });
+
+  const email = new Email(user.email);
+
+  email.sendWelcomeEmail();
+
   respond(res, {
-    message: "Verify email route",
+    message: "Email verified successfully",
   });
 };
 

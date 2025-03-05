@@ -20,6 +20,7 @@ const authRouter = Router();
 
 authRouter.post("/register", registrationValidator, validateRequest, register);
 
+// TODO: Change this back to a POST request when the client is ready
 authRouter.get("/verify-email", verifyEmail);
 
 authRouter.post("/login", loginValidator, validateRequest, login);

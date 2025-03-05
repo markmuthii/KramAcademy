@@ -37,4 +37,15 @@ export class Email {
     // Send the email
     this.sendEmail("Verify your email", emailBody);
   }
+
+  sendWelcomeEmail() {
+    // Get the email template from the email-templates folder
+    const emailTemplate = fs.readFileSync(
+      "src/templates/email/welcome.html",
+      "utf-8"
+    );
+
+    // Send the email
+    this.sendEmail("Welcome to Thrifters!", emailTemplate);
+  }
 }
