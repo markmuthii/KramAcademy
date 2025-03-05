@@ -6,7 +6,7 @@ import { User } from "@/db/models/user";
 import { clearCookie, generateJWT, respond, setCookie } from "@/utils";
 import { BadRequestError } from "@/errors/bad-request";
 import { AUTH_COOKIE_NAME, BACKEND_URL } from "@/constants";
-import { Email } from "@/classes/Email";
+import { Email } from "@/providers/Email";
 
 export const register = async (req: Request, res: Response) => {
   // TODO: Use a timebound token (JWT) instead of a static token
