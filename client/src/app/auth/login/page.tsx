@@ -1,5 +1,11 @@
-const Login = () => {
-  return <div>Login</div>;
+import { LoginForm } from "@/components/auth/login-form";
+
+export const metadata = {
+  title: "Login - Thrifters",
 };
 
-export default Login;
+const LoginPage = () => {
+  return <LoginForm />;
+};
+
+export default LoginPage;

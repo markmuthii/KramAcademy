@@ -1,5 +1,11 @@
-const Register = () => {
-  return <div>Register</div>;
+import { RegisterForm } from "@/components/auth/register-form";
+
+export const metadata = {
+  title: "Register - Thrifters",
 };
 
-export default Register;
+const RegisterPage = () => {
+  return <RegisterForm />;
+};
+
+export default RegisterPage;
