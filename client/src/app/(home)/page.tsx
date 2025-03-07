@@ -1,11 +1,7 @@
-import { Button } from "@/components/ui/button";
+import { Hero } from "@/components/home/hero";
 
 const Home = () => {
-  return (
-    <div className="h-screen">
-      <Button>Click me</Button>
-    </div>
-  );
+  return <Hero />;
 };
 
 export default Home;
