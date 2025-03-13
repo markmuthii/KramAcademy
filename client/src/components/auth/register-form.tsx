@@ -2,8 +2,8 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import Link from "next/link";
+import { startTransition, useActionState } from "react";
 
 import {
   Form,
@@ -15,26 +15,35 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { registerFormSchema } from "@/schemas/forms";
-import { SubmitButton } from "@/components/submit-button";
-import { registerAction } from "@/actions";
 import { RegisterFormData } from "@/types";
+import { Button } from "@/components/ui/button";
+import { register } from "@/services/auth";
+import { SameLineInputs } from "@/components/ui/dual-input";
 
 const RegisterForm = () => {
+  const [state, action, pending] = useActionState(register, null);
+
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
-      name: "",
+      firstName: "",
+      lastName: "",
       email: "",
+      phone: "",
+      username: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-  const onSubmit = async (values: RegisterFormData) => {
-    await registerAction(values);
+  const onSubmit = (values: RegisterFormData) => {
+    startTransition(async () => {
+      await action(values);
+    });
   };
 
   return (
-    <div className="container mx-auto max-w-md p-6">
+    <div className="container mx-auto max-w-2xl p-6">
       <div className="text-center mb-6">
         <h1 className="text-2xl font-bold mb-2">Create Your Account</h1>
         <p className="text-muted-foreground">
@@ -43,20 +52,37 @@ const RegisterForm = () => {
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="John Doe" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <SameLineInputs>
+            <FormField
+              control={form.control}
+              name="firstName"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>First Name</FormLabel>
+                  <FormControl>
+                    <Input type="text" placeholder="John" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="lastName"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Last Name</FormLabel>
+                  <FormControl>
+                    <Input type="text" placeholder="Doe" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </SameLineInputs>
+
           <FormField
             control={form.control}
             name="email"
@@ -74,20 +100,68 @@ const RegisterForm = () => {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
-            name="password"
+            name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>Phone</FormLabel>
                 <FormControl>
-                  <Input type="password" placeholder="********" {...field} />
+                  <Input type="tel" placeholder="+254712777888" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <SubmitButton className="w-full">Register</SubmitButton>
+
+          <FormField
+            control={form.control}
+            name="username"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Username</FormLabel>
+                <FormControl>
+                  <Input type="tel" placeholder="johndoe" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <SameLineInputs>
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="********" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="confirmPassword"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Confirm Password</FormLabel>
+                  <FormControl>
+                    <Input type="password" placeholder="********" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </SameLineInputs>
+
+          <Button type="submit" disabled={pending} className="w-full">
+            {pending ? "..." : "Register"}
+          </Button>
         </form>
       </Form>
 
