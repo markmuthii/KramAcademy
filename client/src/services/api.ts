@@ -1,3 +1,5 @@
+import { APIError } from "@/types";
+
 type RequestMethod = "GET" | "POST" | "PUT" | "DELETE";
 
 interface FetchOptions {
@@ -6,6 +8,10 @@ interface FetchOptions {
   body?: any;
 }
 
+const BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3005/api/v1";
+
+/*
 export const fetchApi = async <T>(
   url: string,
   options: FetchOptions = {
@@ -45,3 +51,96 @@ export const fetchApi = async <T>(
 
   return responseJSON.data as T;
 };
+*/
+
+class APIClient {
+  private baseUrl: string;
+  private defaultHeaders: Record<string, string>;
+
+  constructor(baseUrl: string = BASE_URL, defaultHeaders = {}) {
+    this.baseUrl = baseUrl;
+    this.defaultHeaders = {
+      "Content-Type": "application/json",
+      ...defaultHeaders,
+    };
+  }
+
+  async request<T>(
+    endppoint: string,
+    { method = "GET", headers = {}, body = {} }: FetchOptions
+  ) {
+    const config = {
+      method,
+      headers: {
+        ...this.defaultHeaders,
+        ...headers,
+      },
+      body: body ? JSON.stringify(body) : undefined,
+      credentials: "include" as RequestCredentials,
+    };
+
+    try {
+      const response = await fetch(`${this.baseUrl}${endppoint}`, config);
+
+      // TODO: Handle errors from the server
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Something went wrong");
+      }
+
+      const responseJSON = (await response.json()) as {
+        success: boolean;
+        data?: T;
+        errors?: APIError[];
+      };
+
+      if (!responseJSON.success) {
+        throw new Error("Something went wrong");
+      }
+
+      return responseJSON.data as T;
+    } catch (e) {
+      throw e;
+    }
+  }
+
+  get<T>(
+    endpoint: string,
+    options: FetchOptions = {
+      method: "GET",
+    }
+  ) {
+    return this.request<T>(endpoint, { ...options });
+  }
+
+  post<T>(
+    endpoint: string,
+    options: FetchOptions = {
+      method: "POST",
+    }
+  ) {
+    return this.request<T>(endpoint, { ...options });
+  }
+
+  put<T>(
+    endpoint: string,
+    options: FetchOptions = {
+      method: "PUT",
+    }
+  ) {
+    return this.request<T>(endpoint, { ...options });
+  }
+
+  delete<T>(
+    endpoint: string,
+    options: FetchOptions = {
+      method: "DELETE",
+    }
+  ) {
+    return this.request<T>(endpoint, { ...options });
+  }
+}
+
+const fetapi = new APIClient();
+
+export { fetapi };
