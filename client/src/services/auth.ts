@@ -1,11 +1,20 @@
 "use server";
 
-import { RegisterFormData } from "@/types";
+import { fetapi } from "@/services/api";
+import { RegisterData, RegisterFormData } from "@/types";
 
-export const register = async (_: string | null, data: RegisterFormData) => {
-  await new Promise((resolve) => setTimeout(resolve, 2000));
+type RegisterState = string | null | { error: string };
 
-  console.log("Registering user", data);
+export const register = async (_: RegisterState, data: RegisterFormData) => {
+  try {
+    const response = await fetapi.post<RegisterData>("/auth/register", {
+      body: data,
+    });
 
-  return "User registered";
+    return response.message;
+  } catch (error) {
+    return {
+      error: "Something went wrong. Please try again.",
+    };
+  }
 };

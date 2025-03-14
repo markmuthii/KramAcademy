@@ -32,8 +32,8 @@ export const register = async (req: Request, res: Response) => {
   respond(
     res,
     {
-      success: true,
-      message: "User registered successfully",
+      message:
+        "Registration successful. Check your email for verification link.",
     },
     201
   );

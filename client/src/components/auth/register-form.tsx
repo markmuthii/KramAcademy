@@ -3,7 +3,9 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Link from "next/link";
-import { startTransition, useActionState } from "react";
+import { startTransition, useActionState, useEffect } from "react";
+import { redirect } from "next/navigation";
+import { toast } from "sonner";
 
 import {
   Form,
@@ -37,10 +39,23 @@ const RegisterForm = () => {
   });
 
   const onSubmit = (values: RegisterFormData) => {
-    startTransition(async () => {
-      await action(values);
+    startTransition(() => {
+      action(values);
     });
   };
+
+  useEffect(() => {
+    if (state === null) return;
+
+    if (typeof state === "string") {
+      toast.success(state, { duration: 8000 });
+      redirect("/auth/login");
+    }
+
+    if (typeof state === "object" && state.error) {
+      toast.error(state.error);
+    }
+  }, [state]);
 
   return (
     <div className="container mx-auto max-w-2xl p-6">
