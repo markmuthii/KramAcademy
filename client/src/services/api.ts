@@ -3,7 +3,7 @@ import { APIError } from "@/types";
 type RequestMethod = "GET" | "POST" | "PUT" | "DELETE";
 
 interface FetchOptions {
-  method: RequestMethod;
+  method?: RequestMethod;
   headers?: Record<string, string>;
   body?: any;
 }
@@ -67,7 +67,7 @@ class APIClient {
 
   async request<T>(
     endppoint: string,
-    { method = "GET", headers = {}, body = {} }: FetchOptions
+    { method, headers = {}, body = {} }: FetchOptions
   ) {
     const config = {
       method,
@@ -104,39 +104,23 @@ class APIClient {
     }
   }
 
-  get<T>(
-    endpoint: string,
-    options: FetchOptions = {
-      method: "GET",
-    }
-  ) {
+  get<T>(endpoint: string, options: FetchOptions = {}) {
+    options.method = "GET";
     return this.request<T>(endpoint, { ...options });
   }
 
-  post<T>(
-    endpoint: string,
-    options: FetchOptions = {
-      method: "POST",
-    }
-  ) {
+  post<T>(endpoint: string, options: FetchOptions = {}) {
+    options.method = "POST";
     return this.request<T>(endpoint, { ...options });
   }
 
-  put<T>(
-    endpoint: string,
-    options: FetchOptions = {
-      method: "PUT",
-    }
-  ) {
+  put<T>(endpoint: string, options: FetchOptions = {}) {
+    options.method = "PUT";
     return this.request<T>(endpoint, { ...options });
   }
 
-  delete<T>(
-    endpoint: string,
-    options: FetchOptions = {
-      method: "DELETE",
-    }
-  ) {
+  delete<T>(endpoint: string, options: FetchOptions = {}) {
+    options.method = "DELETE";
     return this.request<T>(endpoint, { ...options });
   }
 }
