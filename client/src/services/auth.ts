@@ -14,7 +14,10 @@ export const register = async (_: RegisterState, data: RegisterFormData) => {
     return response.message;
   } catch (error) {
     return {
-      error: "Something went wrong. Please try again.",
+      error:
+        error instanceof Error
+          ? error.message
+          : "An error occurred. Please try again.",
     };
   }
 };

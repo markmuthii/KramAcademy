@@ -83,10 +83,6 @@ class APIClient {
       const response = await fetch(`${this.baseUrl}${endppoint}`, config);
 
       // TODO: Handle errors from the server
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Something went wrong");
-      }
 
       const responseJSON = (await response.json()) as {
         success: boolean;
@@ -94,8 +90,9 @@ class APIClient {
         errors?: APIError[];
       };
 
-      if (!responseJSON.success) {
-        throw new Error("Something went wrong");
+      if (!responseJSON.success && responseJSON.errors) {
+        // Throw an error if the response is not successful
+        throw new Error(responseJSON.errors[0].message);
       }
 
       return responseJSON.data as T;
