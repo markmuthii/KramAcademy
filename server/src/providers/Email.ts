@@ -10,15 +10,17 @@ export class Email {
     this.to = to;
   }
 
-  private sendEmail(subject: string, html: string) {
+  private async sendEmail(subject: string, html: string) {
     const resend = new Resend(RESEND_API_KEY);
 
-    resend.emails.send({
+    const emailResponse = await resend.emails.send({
       from: RESEND_EMAIL!,
       to: this.to,
       subject,
       html,
     });
+
+    return emailResponse;
   }
 
   sendEmailVerification(verificationLink: string) {
@@ -35,7 +37,7 @@ export class Email {
     );
 
     // Send the email
-    this.sendEmail("Verify your email", emailBody);
+    return this.sendEmail("Verify your email", emailBody);
   }
 
   sendWelcomeEmail() {
@@ -46,7 +48,7 @@ export class Email {
     );
 
     // Send the email
-    this.sendEmail("Welcome to Thrifters!", emailTemplate);
+    return this.sendEmail("Welcome to Thrifters!", emailTemplate);
   }
 
   sendResetPasswordEmail(resetLink: string) {
@@ -60,6 +62,6 @@ export class Email {
     const emailBody = emailTemplate.replace("{{resetLink}}", resetLink);
 
     // Send the email
-    this.sendEmail("Reset your password", emailBody);
+    return this.sendEmail("Reset your password", emailBody);
   }
 }

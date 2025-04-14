@@ -16,7 +16,7 @@ export const register = async (req: Request, res: Response) => {
 
   const user = await User.create(req.body);
 
-  await Token.create({
+  const tokenDoc = await Token.create({
     token,
     user: user._id,
     type: "email",
@@ -25,9 +25,20 @@ export const register = async (req: Request, res: Response) => {
   const email = new Email(req.body.email);
 
   // TODO: Set the frontend as the email verification link
-  email.sendEmailVerification(
+  const emailResponse = await email.sendEmailVerification(
     `${BACKEND_URL}/api/v1/auth/verify-email?token=${token}`
   );
+
+  console.log({ emailResponse });
+
+  if (!emailResponse || emailResponse.error) {
+    // Delete the user and token if the email is not sent
+    await User.findByIdAndDelete(user._id);
+    await Token.findByIdAndDelete(tokenDoc._id);
+    throw new BadRequestError(
+      "Verification email not sent. Please register again."
+    );
+  }
 
   respond(
     res,
