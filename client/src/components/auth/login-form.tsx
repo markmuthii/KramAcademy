@@ -2,8 +2,9 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 import Link from "next/link";
+import { redirect } from "next/navigation";
+import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,8 +20,6 @@ import { loginFormSchema } from "@/schemas/forms";
 import { LoginFormData } from "@/types";
 import { startTransition, useActionState, useEffect } from "react";
 import { login } from "@/services/auth";
-import { redirect } from "next/navigation";
-import { toast } from "sonner";
 
 const LoginForm = () => {
   const [state, loginAction, pending] = useActionState(login, null);
