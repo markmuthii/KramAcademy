@@ -44,7 +44,7 @@ const LoginForm = () => {
 
     if (typeof state === "string") {
       toast.success(state, { duration: 8000 });
-      // redirect("/dashboard");
+      redirect("/account");
     }
 
     if (typeof state === "object" && state.error) {
