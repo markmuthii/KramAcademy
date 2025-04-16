@@ -30,7 +30,7 @@ export interface IJWTUser {
   _id: IUser["_id"];
 }
 
-// TJWTPaylkoad which extends JWTPayload to include user
+// TJWTPayload which extends JWTPayload to include user
 export interface IJWTPayload extends JwtPayload {
   user: IJWTUser;
 }

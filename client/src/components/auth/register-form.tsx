@@ -23,7 +23,7 @@ import { register } from "@/services/auth";
 import { SameLineInputs } from "@/components/ui/dual-input";
 
 const RegisterForm = () => {
-  const [state, action, pending] = useActionState(register, null);
+  const [state, registerAction, pending] = useActionState(register, null);
 
   const form = useForm<RegisterFormData>({
     resolver: zodResolver(registerFormSchema),
@@ -40,7 +40,7 @@ const RegisterForm = () => {
 
   const onSubmit = (values: RegisterFormData) => {
     startTransition(() => {
-      action(values);
+      registerAction(values);
     });
   };
 
