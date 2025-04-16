@@ -1,7 +1,9 @@
 import { z } from "zod";
-import { registerFormSchema } from "@/schemas/forms";
+import { loginFormSchema, registerFormSchema } from "@/schemas/forms";
 
 export type RegisterFormData = z.infer<typeof registerFormSchema>;
+
+export type LoginFormData = z.infer<typeof loginFormSchema>;
 
 export interface APIError {
   message: string;
@@ -19,6 +21,6 @@ export interface APIResponse<T> {
   data: T | T[];
 }
 
-export interface RegisterData {
+export interface AuthData {
   message: string;
 }

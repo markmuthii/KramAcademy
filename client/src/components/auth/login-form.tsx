@@ -16,9 +16,16 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { loginFormSchema } from "@/schemas/forms";
+import { LoginFormData } from "@/types";
+import { startTransition, useActionState, useEffect } from "react";
+import { login } from "@/services/auth";
+import { redirect } from "next/navigation";
+import { toast } from "sonner";
 
 const LoginForm = () => {
-  const form = useForm<z.infer<typeof loginFormSchema>>({
+  const [state, loginAction, pending] = useActionState(login, null);
+
+  const form = useForm<LoginFormData>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: "",
@@ -26,9 +33,24 @@ const LoginForm = () => {
     },
   });
 
-  function onSubmit(values: z.infer<typeof loginFormSchema>) {
-    console.log(values);
+  function onSubmit(values: LoginFormData) {
+    startTransition(() => {
+      loginAction(values);
+    });
   }
+
+  useEffect(() => {
+    if (state === null) return;
+
+    if (typeof state === "string") {
+      toast.success(state, { duration: 8000 });
+      // redirect("/dashboard");
+    }
+
+    if (typeof state === "object" && state.error) {
+      toast.error(state.error);
+    }
+  }, [state]);
 
   return (
     <div className="container mx-auto max-w-md p-6">
@@ -69,8 +91,8 @@ const LoginForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full">
-            Log In
+          <Button type="submit" className="w-full" disabled={pending}>
+            {pending ? "..." : "Log In"}
           </Button>
         </form>
       </Form>
