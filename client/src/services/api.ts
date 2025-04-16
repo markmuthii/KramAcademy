@@ -53,7 +53,7 @@ export const fetchApi = async <T>(
 };
 */
 
-class APIClient {
+export class APIClient {
   private baseUrl: string;
   private defaultHeaders: Record<string, string>;
 
@@ -79,6 +79,7 @@ class APIClient {
       credentials: "include" as RequestCredentials,
     };
 
+    // TODO: Refactor this to return the response instead of the data
     try {
       const response = await fetch(`${this.baseUrl}${endppoint}`, config);
 
