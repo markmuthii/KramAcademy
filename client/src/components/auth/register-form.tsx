@@ -47,12 +47,12 @@ const RegisterForm = () => {
   useEffect(() => {
     if (state === null) return;
 
-    if (typeof state === "string") {
-      toast.success(state, { duration: 8000 });
+    if ("message" in state) {
+      toast.success(state.message, { duration: 8000 });
       redirect("/auth/login");
     }
 
-    if (typeof state === "object" && state.error) {
+    if ("error" in state) {
       toast.error(state.error);
     }
   }, [state]);
