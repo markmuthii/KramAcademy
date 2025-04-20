@@ -62,14 +62,14 @@ const LoginForm = () => {
   }, []);
 
   return (
-    <div className="container mx-auto max-w-md p-6">
+    <div className="container mx-auto max-w-xl p-6">
       <div className="text-center mb-6">
         <h1 className="text-2xl font-bold mb-2">Welcome Back</h1>
         <p className="text-muted-foreground">Log in to access your account</p>
       </div>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
             control={form.control}
             name="email"
@@ -77,16 +77,13 @@ const LoginForm = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input
-                    type="email"
-                    placeholder="john@example.com"
-                    {...field}
-                  />
+                  <Input type="email" placeholder="john@wick.com" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
             name="password"
@@ -100,6 +97,27 @@ const LoginForm = () => {
               </FormItem>
             )}
           />
+
+          {/* TODO: Get this working  */}
+          <div className="flex justify-between items-center">
+            <div className="flex items-center space-x-2 ">
+              <input
+                id="remember"
+                type="checkbox"
+                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+              />
+              <label
+                htmlFor="remember"
+                className="text-sm text-muted-foreground cursor-pointer"
+              >
+                Remember me
+              </label>
+            </div>
+            <Link href="/auth/forgot-password" className="text-sm text-primary">
+              Forgot password?
+            </Link>
+          </div>
+
           <Button type="submit" className="w-full" disabled={pending}>
             {pending ? "..." : "Log In"}
           </Button>
@@ -107,7 +125,7 @@ const LoginForm = () => {
       </Form>
 
       <div className="text-center mt-6">
-        <p className="text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           Don't have an account?{" "}
           <Link href="/auth/register" className="text-primary">
             Register

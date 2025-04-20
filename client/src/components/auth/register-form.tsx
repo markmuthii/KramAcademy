@@ -58,7 +58,7 @@ const RegisterForm = () => {
   }, [state]);
 
   return (
-    <div className="container mx-auto max-w-2xl p-6">
+    <div className="container mx-auto max-w-xl p-6">
       <div className="text-center mb-6">
         <h1 className="text-2xl font-bold mb-2">Create Your Account</h1>
         <p className="text-muted-foreground">
@@ -105,11 +105,7 @@ const RegisterForm = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input
-                    type="email"
-                    placeholder="john@example.com"
-                    {...field}
-                  />
+                  <Input type="email" placeholder="john@wick.com" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -137,7 +133,7 @@ const RegisterForm = () => {
               <FormItem>
                 <FormLabel>Username</FormLabel>
                 <FormControl>
-                  <Input type="tel" placeholder="johndoe" {...field} />
+                  <Input type="tel" placeholder="johnwick" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -181,7 +177,7 @@ const RegisterForm = () => {
       </Form>
 
       <div className="text-center mt-6">
-        <p className="text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           Already have an account?{" "}
           <Link href="/auth/login" className="text-primary">
             Log in
