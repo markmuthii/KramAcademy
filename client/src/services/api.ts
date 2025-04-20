@@ -11,48 +11,6 @@ interface FetchOptions {
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://localhost:3005/api/v1";
 
-/*
-export const fetchApi = async <T>(
-  url: string,
-  options: FetchOptions = {
-    method: "GET",
-  }
-) => {
-  const { method, headers, body } = options;
-
-  const response = await fetch(url, {
-    method,
-    headers: {
-      "Content-Type": "application/json",
-      ...headers,
-    },
-    body: body ? JSON.stringify(body) : undefined,
-    credentials: "include",
-  });
-
-  if (!response.ok) {
-    // TODO: Handle errors
-    const errorData = await response.json();
-    throw new Error(errorData.message || "Something went wrong");
-  }
-
-  const responseJSON = (await response.json()) as {
-    success: boolean;
-    data?: T;
-    errors?: {
-      [key: string]: string;
-    }[];
-  };
-
-  if (!responseJSON.success) {
-    // TODO: Handle errors
-    throw new Error("Something went wrong");
-  }
-
-  return responseJSON.data as T;
-};
-*/
-
 export class APIClient {
   private baseUrl: string;
   private defaultHeaders: Record<string, string>;
@@ -79,11 +37,12 @@ export class APIClient {
       credentials: "include" as RequestCredentials,
     };
 
-    // TODO: Refactor this to return the response instead of the data
+    if (method === "GET") {
+      delete config.body;
+    }
+
     try {
       const response = await fetch(`${this.baseUrl}${endppoint}`, config);
-
-      // TODO: Handle errors from the server
 
       const responseJSON = (await response.json()) as {
         success: boolean;
@@ -96,7 +55,7 @@ export class APIClient {
         throw new Error(responseJSON.errors[0].message);
       }
 
-      return responseJSON.data as T;
+      return { data: responseJSON.data as T, response };
     } catch (e) {
       throw e;
     }
