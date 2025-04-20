@@ -159,7 +159,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
   email.sendResetPasswordEmail(resetLink);
 
   respond(res, {
-    message: "Forgot password route",
+    message: "A reset password link has been sent to your email",
   });
 };
 

@@ -43,3 +43,9 @@ export const loginFormSchema = z.object({
     message: "Password is required.",
   }),
 });
+
+export const forgotPasswordSchema = z.object({
+  email: z.string().email({
+    message: "Please enter a valid email address.",
+  }),
+});

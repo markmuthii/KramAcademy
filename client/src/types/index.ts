@@ -1,9 +1,15 @@
 import { z } from "zod";
-import { loginFormSchema, registerFormSchema } from "@/schemas/forms";
+import {
+  forgotPasswordSchema,
+  loginFormSchema,
+  registerFormSchema,
+} from "@/schemas/forms";
 
 export type RegisterFormData = z.infer<typeof registerFormSchema>;
 
 export type LoginFormData = z.infer<typeof loginFormSchema>;
+
+export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 
 export interface APIError {
   message: string;

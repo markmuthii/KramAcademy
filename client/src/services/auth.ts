@@ -2,12 +2,18 @@
 
 import { cookies, headers } from "next/headers";
 
-import { AuthData, LoginFormData, RegisterFormData } from "@/types";
+import {
+  AuthData,
+  ForgotPasswordFormData,
+  LoginFormData,
+  RegisterFormData,
+} from "@/types";
 import { fetapi } from "@/services/api";
 import { createUserSession } from "@/lib/session";
 
 type RegisterState = AuthData | null | { error: string };
 type LoginState = AuthData | null | { error: string };
+type ForgotPasswordState = AuthData | null | { error: string };
 
 export const authError = async (error: unknown) => {
   return {
@@ -60,6 +66,21 @@ export const logout = async () => {
 
     // Clear the cookie in the browser
     (await cookies()).delete("auth_token");
+    return result.data;
+  } catch (error) {
+    return await authError(error);
+  }
+};
+
+export const forgotPassword = async (
+  _: ForgotPasswordState,
+  data: ForgotPasswordFormData
+) => {
+  try {
+    const result = await fetapi.post<AuthData>("/auth/forgot-password", {
+      body: data,
+    });
+
     return result.data;
   } catch (error) {
     return await authError(error);
