@@ -16,10 +16,12 @@ export const useAuth = create<UserStore>((set) => ({
   authError: null,
   setUser: (user: any) => set({ user }),
   logout: async () => {
+    const result = await logout();
+
     // Clear user from store after logout
     set({ user: null });
 
-    return await logout();
+    return result;
   },
   setAuthError: (error: string) => set({ authError: error }),
   clearAuthError: () => set({ authError: null }),
