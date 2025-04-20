@@ -17,12 +17,14 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { loginFormSchema } from "@/schemas/forms";
-import { LoginFormData } from "@/types";
+import { LoginFormData, User } from "@/types";
 import { startTransition, useActionState, useEffect } from "react";
 import { login } from "@/services/auth";
+import { useAuth } from "@/store/auth";
 
 const LoginForm = () => {
   const [state, loginAction, pending] = useActionState(login, null);
+  const { setUser, authError, clearAuthError } = useAuth();
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginFormSchema),
@@ -41,8 +43,8 @@ const LoginForm = () => {
   useEffect(() => {
     if (state === null) return;
 
-    if ("message" in state) {
-      // TODO: Set the user in global state
+    if ("message" in state && "user" in state) {
+      setUser(state.user as User);
       toast.success(state.message, { duration: 8000 });
       redirect("/account");
     }
@@ -51,6 +53,13 @@ const LoginForm = () => {
       toast.error(state.error);
     }
   }, [state]);
+
+  useEffect(() => {
+    if (authError) {
+      toast.error(authError);
+      clearAuthError();
+    }
+  }, []);
 
   return (
     <div className="container mx-auto max-w-md p-6">
