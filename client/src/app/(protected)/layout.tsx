@@ -9,22 +9,27 @@ const ProtectedLayout = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Only send request if user is not already set
+    // This prevents unnecessary requests when navigating between pages
     if (!user) {
       const getUser = async () => {
-        setLoading(true);
+        // setLoading(true);
         const session = await getUserSession();
         if ("error" in session) {
           setAuthError("You must be logged in to access this page.");
+          // setLoading(false);
           redirect("/auth/login");
         } else if (session.user) {
           // Set user in store
           setUser(session.user);
+          setLoading(false);
         }
-        setLoading(false);
       };
       getUser();
+    } else {
+      setLoading(false);
     }
-  }, [user]);
+  }, []);
 
   return (
     <>
