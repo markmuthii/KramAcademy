@@ -53,7 +53,7 @@ export const login = async (_: LoginState, data: LoginFormData) => {
 
 export const logout = async () => {
   try {
-    const result = await fetapi.post<AuthData>(
+    const result = await fetapi.delete<AuthData>(
       "/auth/logout",
       await authHeaders()
     );
