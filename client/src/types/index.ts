@@ -21,6 +21,18 @@ export interface APIResponse<T> {
   data: T | T[];
 }
 
+export interface User {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  username: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface AuthData {
   message: string;
+  user?: User;
 }
