@@ -19,6 +19,10 @@ const passwordValidator = [
     .withMessage("Passwords do not match."),
 ];
 
+export const emailValidator = [
+  body("email").isEmail().withMessage("Email is invalid."),
+];
+
 export const registrationValidator = [
   body(["firstName", "lastName"])
     .isString()
@@ -27,18 +31,18 @@ export const registrationValidator = [
       (value, { path, req }) =>
         `${path === "firstName" ? "First Name" : "Last Name"} is required.`
     ),
-  body("email").isEmail().withMessage("Email is invalid."),
+  ...emailValidator,
   body("phone").isMobilePhone("en-KE").withMessage("Phone number is invalid."),
   body("username").isString().notEmpty().withMessage("Username is required."),
   ...passwordValidator,
 ];
 
 export const loginValidator = [
-  body("email").isEmail().withMessage("Email is invalid."),
+  ...emailValidator,
   body("password").notEmpty().withMessage("Password is required."),
 ];
 
-export const passwordResetValidator = [...passwordValidator];
+export const passwordResetValidator = [...emailValidator, ...passwordValidator];
 
 export const validateRequest = (
   req: Request,

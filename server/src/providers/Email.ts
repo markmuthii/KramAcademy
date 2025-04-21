@@ -64,4 +64,15 @@ export class Email {
     // Send the email
     return this.sendEmail("Reset your password", emailBody);
   }
+
+  sendPasswordChangedEmail() {
+    // Get the email template from the email-templates folder
+    const emailTemplate = fs.readFileSync(
+      "src/templates/email/password-reset.html",
+      "utf-8"
+    );
+
+    // Send the email
+    return this.sendEmail("Password Reset Successful", emailTemplate);
+  }
 }

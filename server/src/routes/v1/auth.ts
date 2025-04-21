@@ -11,7 +11,9 @@ import {
 } from "@/controllers";
 import {
   authenticate,
+  emailValidator,
   loginValidator,
+  passwordResetValidator,
   registrationValidator,
   validateRequest,
 } from "@/middleware";
@@ -29,8 +31,18 @@ authRouter.get("/me", authenticate, currentUser);
 
 authRouter.delete("/logout", authenticate, logout);
 
-authRouter.post("/forgot-password", forgotPassword);
+authRouter.post(
+  "/forgot-password",
+  emailValidator,
+  validateRequest,
+  forgotPassword
+);
 
-authRouter.post("/reset-password", resetPassword);
+authRouter.post(
+  "/reset-password",
+  passwordResetValidator,
+  validateRequest,
+  resetPassword
+);
 
 export { authRouter };

@@ -164,8 +164,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
 };
 
 export const resetPassword = async (req: Request, res: Response) => {
-  const { token, email } = req.query;
-  const { password } = req.body;
+  const { password, token, email } = req.body;
 
   const tokenDetails = await Token.findOne({
     token,
@@ -195,7 +194,11 @@ export const resetPassword = async (req: Request, res: Response) => {
 
   await tokenDetails.save();
 
+  const sendEmail = new Email(email);
+
+  sendEmail.sendPasswordChangedEmail();
+
   respond(res, {
-    message: "Reset password route",
+    message: "Password reset successfully",
   });
 };
