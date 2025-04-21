@@ -3,6 +3,7 @@ import {
   forgotPasswordSchema,
   loginFormSchema,
   registerFormSchema,
+  resetPasswordSchema,
 } from "@/schemas/forms";
 
 export type RegisterFormData = z.infer<typeof registerFormSchema>;
@@ -10,6 +11,8 @@ export type RegisterFormData = z.infer<typeof registerFormSchema>;
 export type LoginFormData = z.infer<typeof loginFormSchema>;
 
 export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
+
+export type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
 
 export interface APIError {
   message: string;

@@ -49,3 +49,25 @@ export const forgotPasswordSchema = z.object({
     message: "Please enter a valid email address.",
   }),
 });
+
+export const resetPasswordSchema = forgotPasswordSchema
+  .merge(
+    z.object({
+      password: z.string().min(8, {
+        message: "Password must be at least 8 characters.",
+      }),
+      confirmPassword: z.string().min(8, {
+        message: "Password must be at least 8 characters.",
+      }),
+    })
+  )
+  .superRefine(({ password, confirmPassword }, ctx) => {
+    // TODO: Fix this. When typing the password, the confirmPassword field should be validated as well.
+    if (password !== confirmPassword) {
+      ctx.addIssue({
+        message: "Passwords do not match.",
+        path: ["confirmPassword"],
+        code: z.ZodIssueCode.custom,
+      });
+    }
+  });

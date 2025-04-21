@@ -5,7 +5,7 @@ import crypto from "crypto";
 import { User } from "@/db/models/user";
 import { clearCookie, generateJWT, respond, setCookie } from "@/utils";
 import { BadRequestError } from "@/errors/bad-request";
-import { AUTH_COOKIE_NAME, BACKEND_URL } from "@/constants";
+import { AUTH_COOKIE_NAME, BACKEND_URL, FRONTEND_URL } from "@/constants";
 import { Email } from "@/providers/Email";
 import { Token } from "@/db/models/token";
 
@@ -154,7 +154,7 @@ export const forgotPassword = async (req: Request, res: Response) => {
   const email = new Email(user.email);
 
   // TODO: Set the frontend as the reset password link
-  const resetLink = `${BACKEND_URL}/api/v1/auth/reset-password?token=${token}&email=${user.email}`;
+  const resetLink = `${FRONTEND_URL}/auth/reset-password?token=${token}&email=${user.email}`;
 
   email.sendResetPasswordEmail(resetLink);
 
