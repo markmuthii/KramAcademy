@@ -21,6 +21,7 @@ import { Button } from "@/components/ui/button";
 import { register } from "@/services/auth";
 import { SameLineInputs } from "@/components/ui/dual-input";
 import { AuthFormWrapper } from "@/components/auth/auth-form-wrapper";
+import { RequiredInput } from "@/components/ui/required-input";
 
 const RegisterForm = () => {
   const [state, registerAction, pending] = useActionState(register, null);
@@ -67,7 +68,9 @@ const RegisterForm = () => {
               name="firstName"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>First Name</FormLabel>
+                  <FormLabel>
+                    First Name <RequiredInput />
+                  </FormLabel>
                   <FormControl>
                     <Input type="text" placeholder="John" {...field} />
                   </FormControl>
@@ -81,7 +84,9 @@ const RegisterForm = () => {
               name="lastName"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Last Name</FormLabel>
+                  <FormLabel>
+                    Last Name <RequiredInput />
+                  </FormLabel>
                   <FormControl>
                     <Input type="text" placeholder="Doe" {...field} />
                   </FormControl>
@@ -96,7 +101,9 @@ const RegisterForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>
+                  Email <RequiredInput />
+                </FormLabel>
                 <FormControl>
                   <Input type="email" placeholder="john@wick.com" {...field} />
                 </FormControl>
@@ -110,7 +117,9 @@ const RegisterForm = () => {
             name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Phone</FormLabel>
+                <FormLabel>
+                  Phone <RequiredInput />
+                </FormLabel>
                 <FormControl>
                   <Input type="tel" placeholder="+254712777888" {...field} />
                 </FormControl>
@@ -124,7 +133,9 @@ const RegisterForm = () => {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Username</FormLabel>
+                <FormLabel>
+                  Username <RequiredInput />
+                </FormLabel>
                 <FormControl>
                   <Input type="tel" placeholder="johnwick" {...field} />
                 </FormControl>
@@ -139,7 +150,9 @@ const RegisterForm = () => {
               name="password"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>
+                    Password <RequiredInput />
+                  </FormLabel>
                   <FormControl>
                     <Input type="password" placeholder="********" {...field} />
                   </FormControl>
@@ -153,7 +166,9 @@ const RegisterForm = () => {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem className="w-full">
-                  <FormLabel>Confirm Password</FormLabel>
+                  <FormLabel>
+                    Confirm Password <RequiredInput />
+                  </FormLabel>
                   <FormControl>
                     <Input type="password" placeholder="********" {...field} />
                   </FormControl>

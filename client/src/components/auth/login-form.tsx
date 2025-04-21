@@ -22,6 +22,7 @@ import { startTransition, useActionState, useEffect } from "react";
 import { login } from "@/services/auth";
 import { useAuth } from "@/store/auth";
 import { AuthFormWrapper } from "@/components/auth/auth-form-wrapper";
+import { RequiredInput } from "@/components/ui/required-input";
 
 const LoginForm = () => {
   const [state, loginAction, pending] = useActionState(login, null);
@@ -71,7 +72,9 @@ const LoginForm = () => {
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
+                <FormLabel>
+                  Email <RequiredInput />
+                </FormLabel>
                 <FormControl>
                   <Input type="email" placeholder="john@wick.com" {...field} />
                 </FormControl>
@@ -85,7 +88,9 @@ const LoginForm = () => {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>
+                  Password <RequiredInput />
+                </FormLabel>
                 <FormControl>
                   <Input type="password" placeholder="********" {...field} />
                 </FormControl>
@@ -96,11 +101,11 @@ const LoginForm = () => {
 
           {/* TODO: Get this working  */}
           <div className="flex justify-between items-center">
-            <div className="flex items-center space-x-2 ">
+            <div className="flex items-center space-x-2">
               <input
                 id="remember"
                 type="checkbox"
-                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary cursor-pointer"
               />
               <label
                 htmlFor="remember"
