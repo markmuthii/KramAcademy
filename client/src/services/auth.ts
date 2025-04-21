@@ -7,6 +7,7 @@ import {
   ForgotPasswordFormData,
   LoginFormData,
   RegisterFormData,
+  ResetPasswordFormData,
 } from "@/types";
 import { fetapi } from "@/services/api";
 import { createUserSession } from "@/lib/session";
@@ -78,6 +79,21 @@ export const forgotPassword = async (
 ) => {
   try {
     const result = await fetapi.post<AuthData>("/auth/forgot-password", {
+      body: data,
+    });
+
+    return result.data;
+  } catch (error) {
+    return await authError(error);
+  }
+};
+
+export const resetPassword = async (
+  _: ForgotPasswordState,
+  data: ResetPasswordFormData
+) => {
+  try {
+    const result = await fetapi.post<AuthData>("/auth/reset-password", {
       body: data,
     });
 

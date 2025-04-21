@@ -13,11 +13,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { RequiredInput } from "@/components/ui/required-input";
 import { resetPasswordSchema } from "@/schemas/forms";
+import { resetPassword } from "@/services/auth";
 import { useAuth } from "@/store/auth";
 import { ResetPasswordFormData } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { redirect, useSearchParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { startTransition, useActionState, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -29,6 +30,11 @@ const ResetPasswordForm = () => {
   // State to hold the token and email
   const [token, setToken] = useState<string | null>(null);
   const [email, setEmail] = useState<string | null>(null);
+
+  const [state, restedPasswordAction, pending] = useActionState(
+    resetPassword,
+    null
+  );
 
   useEffect(() => {
     // If the token or email is not present in the URL, redirect to the login page with an error
@@ -54,6 +60,7 @@ const ResetPasswordForm = () => {
       email: searchParams.get("email") || "",
       password: "",
       confirmPassword: "",
+      token: searchParams.get("token") || "",
     },
   });
 
@@ -63,7 +70,24 @@ const ResetPasswordForm = () => {
       toast.error("You cannot change the email address");
       return;
     }
+
+    startTransition(() => {
+      restedPasswordAction(values);
+    });
   };
+
+  useEffect(() => {
+    if (state === null) return;
+
+    if ("message" in state) {
+      toast.success(state.message, { duration: 8000 });
+      redirect("/auth/login");
+    }
+
+    if ("error" in state) {
+      toast.error(state.error);
+    }
+  }, [state]);
 
   return (
     <AuthFormWrapper form="reset-password">
@@ -120,8 +144,8 @@ const ResetPasswordForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="w-full">
-            Reset Password
+          <Button type="submit" className="w-full" disabled={pending}>
+            {pending ? "..." : "Reset Password"}
           </Button>
         </form>
       </Form>

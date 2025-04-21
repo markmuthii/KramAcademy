@@ -12,7 +12,9 @@ export type LoginFormData = z.infer<typeof loginFormSchema>;
 
 export type ForgotPasswordFormData = z.infer<typeof forgotPasswordSchema>;
 
-export type ResetPasswordFormData = z.infer<typeof resetPasswordSchema>;
+export type ResetPasswordFormData = z.infer<typeof resetPasswordSchema> & {
+  token: string;
+};
 
 export interface APIError {
   message: string;
