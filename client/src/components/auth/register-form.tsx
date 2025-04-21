@@ -2,7 +2,6 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
 import { startTransition, useActionState, useEffect } from "react";
 import { redirect } from "next/navigation";
 import { toast } from "sonner";
@@ -21,6 +20,7 @@ import { RegisterFormData } from "@/types";
 import { Button } from "@/components/ui/button";
 import { register } from "@/services/auth";
 import { SameLineInputs } from "@/components/ui/dual-input";
+import { AuthFormWrapper } from "@/components/auth/auth-form-wrapper";
 
 const RegisterForm = () => {
   const [state, registerAction, pending] = useActionState(register, null);
@@ -58,14 +58,7 @@ const RegisterForm = () => {
   }, [state]);
 
   return (
-    <div className="container mx-auto max-w-xl p-6">
-      <div className="text-center mb-6">
-        <h1 className="text-2xl font-bold mb-2">Create Your Account</h1>
-        <p className="text-muted-foreground">
-          Join our community and start your journey!
-        </p>
-      </div>
-
+    <AuthFormWrapper form="register">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <SameLineInputs>
@@ -175,16 +168,7 @@ const RegisterForm = () => {
           </Button>
         </form>
       </Form>
-
-      <div className="text-center mt-6">
-        <p className="text-sm text-muted-foreground">
-          Already have an account?{" "}
-          <Link href="/auth/login" className="text-primary">
-            Log in
-          </Link>
-        </p>
-      </div>
-    </div>
+    </AuthFormWrapper>
   );
 };
 

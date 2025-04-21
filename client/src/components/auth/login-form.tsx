@@ -21,6 +21,7 @@ import { LoginFormData, User } from "@/types";
 import { startTransition, useActionState, useEffect } from "react";
 import { login } from "@/services/auth";
 import { useAuth } from "@/store/auth";
+import { AuthFormWrapper } from "@/components/auth/auth-form-wrapper";
 
 const LoginForm = () => {
   const [state, loginAction, pending] = useActionState(login, null);
@@ -62,12 +63,7 @@ const LoginForm = () => {
   }, []);
 
   return (
-    <div className="container mx-auto max-w-xl p-6">
-      <div className="text-center mb-6">
-        <h1 className="text-2xl font-bold mb-2">Welcome Back</h1>
-        <p className="text-muted-foreground">Log in to access your account</p>
-      </div>
-
+    <AuthFormWrapper form="login">
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
@@ -123,16 +119,7 @@ const LoginForm = () => {
           </Button>
         </form>
       </Form>
-
-      <div className="text-center mt-6">
-        <p className="text-sm text-muted-foreground">
-          Don't have an account?{" "}
-          <Link href="/auth/register" className="text-primary">
-            Register
-          </Link>
-        </p>
-      </div>
-    </div>
+    </AuthFormWrapper>
   );
 };
 
