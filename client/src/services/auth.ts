@@ -12,9 +12,7 @@ import {
 import { fetapi } from "@/services/api";
 import { createUserSession } from "@/lib/session";
 
-type RegisterState = AuthData | null | { error: string };
-type LoginState = AuthData | null | { error: string };
-type ForgotPasswordState = AuthData | null | { error: string };
+type AuthState = AuthData | null | { error: string };
 
 export const authError = async (error: unknown) => {
   return {
@@ -31,7 +29,7 @@ export const authHeaders = async () => {
   };
 };
 
-export const register = async (_: RegisterState, data: RegisterFormData) => {
+export const register = async (_: AuthState, data: RegisterFormData) => {
   try {
     const result = await fetapi.post<AuthData>("/auth/register", {
       body: data,
@@ -74,7 +72,7 @@ export const logout = async () => {
 };
 
 export const forgotPassword = async (
-  _: ForgotPasswordState,
+  _: AuthState,
   data: ForgotPasswordFormData
 ) => {
   try {
@@ -89,7 +87,7 @@ export const forgotPassword = async (
 };
 
 export const resetPassword = async (
-  _: ForgotPasswordState,
+  _: AuthState,
   data: ResetPasswordFormData
 ) => {
   try {
