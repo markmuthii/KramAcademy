@@ -8,6 +8,7 @@ import {
   LoginFormData,
   RegisterFormData,
   ResetPasswordFormData,
+  VerifyEmailData,
 } from "@/types";
 import { fetapi } from "@/services/api";
 import { createUserSession } from "@/lib/session";
@@ -41,7 +42,19 @@ export const register = async (_: AuthState, data: RegisterFormData) => {
   }
 };
 
-export const login = async (_: LoginState, data: LoginFormData) => {
+export const verifyEmail = async (_: AuthState, data: VerifyEmailData) => {
+  try {
+    const result = await fetapi.post<AuthData>("/auth/verify-email", {
+      body: data,
+    });
+
+    return result.data;
+  } catch (error) {
+    return await authError(error);
+  }
+};
+
+export const login = async (_: AuthState, data: LoginFormData) => {
   try {
     const result = await fetapi.post<AuthData>("/auth/login", {
       body: data,

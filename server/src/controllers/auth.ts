@@ -24,9 +24,8 @@ export const register = async (req: Request, res: Response) => {
 
   const email = new Email(req.body.email);
 
-  // TODO: Set the frontend as the email verification link
   const emailResponse = await email.sendEmailVerification(
-    `${BACKEND_URL}/api/v1/auth/verify-email?token=${token}`
+    `${FRONTEND_URL}/auth/verify-email?token=${token}&email=${user.email}`
   );
 
   console.log({ emailResponse });
@@ -51,8 +50,8 @@ export const register = async (req: Request, res: Response) => {
 };
 
 export const verifyEmail = async (req: Request, res: Response) => {
-  // Get the token from the query params
-  const { token } = req.query;
+  // Get the token and email from the query body
+  const { token, email: userEmail } = req.body;
 
   // Find the details of the token
   const tokenDetails = await Token.findOne({
@@ -153,7 +152,6 @@ export const forgotPassword = async (req: Request, res: Response) => {
 
   const email = new Email(user.email);
 
-  // TODO: Set the frontend as the reset password link
   const resetLink = `${FRONTEND_URL}/auth/reset-password?token=${token}&email=${user.email}`;
 
   email.sendResetPasswordEmail(resetLink);
