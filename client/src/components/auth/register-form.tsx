@@ -88,7 +88,7 @@ const RegisterForm = () => {
                     Last Name <RequiredInput />
                   </FormLabel>
                   <FormControl>
-                    <Input type="text" placeholder="Doe" {...field} />
+                    <Input type="text" placeholder="Wick" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
