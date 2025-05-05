@@ -1,3 +1,5 @@
+import { SameSite } from "@/types";
+
 export const ISPROD = process.env.NODE_ENV === "production";
 export const PORT = process.env.PORT || 3005;
 export const MONGO_URI =
@@ -13,7 +15,7 @@ export const AUTH_COOKIE_NAME =
 export const COOKIE_OPTIONS = {
   httpOnly: true,
   maxAge: 1000 * 60 * 60 * 24,
-  sameSite: "none" as const,
+  sameSite: "none" as SameSite,
   secure: ISPROD,
   domain: ISPROD ? `.${PRODUCTION_DOMAIN}` : undefined,
 };

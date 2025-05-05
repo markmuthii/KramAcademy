@@ -1,5 +1,7 @@
 import { JwtPayload } from "jsonwebtoken";
 
+export type SameSite = boolean | "none" | "strict" | "lax" | undefined;
+
 export interface ISerializedError {
   message: string;
   field?: string;
