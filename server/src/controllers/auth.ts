@@ -5,7 +5,7 @@ import crypto from "crypto";
 import { User } from "@/db/models/user";
 import { clearCookie, generateJWT, respond, setCookie } from "@/utils";
 import { BadRequestError } from "@/errors/bad-request";
-import { AUTH_COOKIE_NAME, BACKEND_URL, FRONTEND_URL } from "@/constants";
+import { AUTH_COOKIE_NAME, FRONTEND_URL } from "@/constants";
 import { Email } from "@/providers/Email";
 import { Token } from "@/db/models/token";
 
