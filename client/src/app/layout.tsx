@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Thrifters",
+  title: process.env.NEXT_PUBLIC_APP_NAME,
   description: "Thrift store management for the modern age.",
 };
 
