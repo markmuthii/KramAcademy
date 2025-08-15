@@ -1,7 +1,7 @@
 import fs from "fs";
 import { Resend } from "resend";
 
-import { RESEND_API_KEY, RESEND_EMAIL } from "@/constants";
+import { APP_NAME, RESEND_API_KEY, RESEND_EMAIL } from "@/constants";
 
 export class Email {
   private to: string;
@@ -11,6 +11,9 @@ export class Email {
   }
 
   private async sendEmail(subject: string, html: string) {
+    // Replace {{APP_NAME}} with the actual app name in the html content
+    html = html.replace(/{{APP_NAME}}/g, APP_NAME);
+
     const resend = new Resend(RESEND_API_KEY);
 
     const emailResponse = await resend.emails.send({
@@ -48,7 +51,7 @@ export class Email {
     );
 
     // Send the email
-    return this.sendEmail("Welcome to Thrifters!", emailTemplate);
+    return this.sendEmail(`Welcome to ${APP_NAME}!`, emailTemplate);
   }
 
   sendResetPasswordEmail(resetLink: string) {

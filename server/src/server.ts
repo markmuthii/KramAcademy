@@ -5,13 +5,13 @@ import helmet from "helmet";
 import cors from "cors";
 import morgan from "morgan";
 import compression from "compression";
+import cookieParser from "cookie-parser";
 
 import { v1Router } from "@/routes/v1";
 import { FRONTEND_URL, ISPROD, PORT } from "@/constants";
 import { errorHandler } from "@/middleware";
 import { NotFoundError } from "@/errors/not-found";
 import { connectToDatabase } from "@/db/config";
-import cookieParser from "cookie-parser";
 
 // CONFIGURATION
 connectToDatabase();

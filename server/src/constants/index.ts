@@ -1,5 +1,6 @@
 import { SameSite } from "@/types";
 
+export const APP_NAME = process.env.APP_NAME || "NExpress";
 export const ISPROD = process.env.NODE_ENV === "production";
 export const PORT = process.env.PORT || 3005;
 export const MONGO_URI =
@@ -21,7 +22,7 @@ export const COOKIE_OPTIONS = {
 };
 
 export const RESEND_API_KEY = process.env.RESEND_API_KEY;
-export const RESEND_EMAIL = `Thrifters <${process.env.RESEND_EMAIL}>`;
+export const RESEND_EMAIL = `${APP_NAME} <${process.env.RESEND_EMAIL}>`;
 
 export const PASSWORD_OPTIONS = {
   minLength: 8,
