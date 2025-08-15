@@ -12,7 +12,7 @@ export const registerFormSchema = z
       message: "Please enter a valid email address.",
     }),
     phone: z.string().regex(/\+254\d\d\d\d\d\d\d\d\d$/i, {
-      message: "Please enter a valid phone number.",
+      message: "Please enter a valid phone number in the format +254712345678.",
     }),
     username: z.string().min(2, {
       message: "Username must be at least 2 characters.",
