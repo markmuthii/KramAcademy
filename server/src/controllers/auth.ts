@@ -97,6 +97,10 @@ export const login = async (req: Request, res: Response) => {
     throw new BadRequestError("Invalid credentials");
   }
 
+  if (!user.emailVerifiedOn) {
+    throw new BadRequestError("Please verify your email before logging in.");
+  }
+
   const passwordsMatch = await compare(req.body.password, user.password);
 
   if (!passwordsMatch) {
