@@ -1,3 +1,4 @@
+import { BASE_URL } from "@/lib/constants";
 import { APIError } from "@/types";
 
 type RequestMethod = "GET" | "POST" | "PUT" | "DELETE";
@@ -7,9 +8,6 @@ interface FetchOptions {
   headers?: Record<string, string>;
   body?: any;
 }
-
-const BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3005/api/v1";
 
 export class APIClient {
   private baseUrl: string;
